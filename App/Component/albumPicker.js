@@ -1,22 +1,27 @@
 import React, { Component } from 'react';
 
 import {
-  Picker,
+  ListView,
   StyleSheet,
+  TouchableHighlight,
+  RecyclerViewBackedScrollView,
 } from 'react-native';
 
 const styles = StyleSheet.create({
-  picker: {
-    width: 400,
-    height: 400,
-    backgroundColor: 'green',
-    marginTop: 0,
-    marginBottom: 0,
-    padding: 0
-  }
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 10,
+    backgroundColor: '#F6F6F6',
+  },
+  thumb: {
+    width: 64,
+    height: 64,
+  },
+  text: {
+    flex: 1,
+  },
 });
-
-const Item = Picker.Item;
 
 class AlbumPicker extends Component {
 
@@ -27,61 +32,72 @@ class AlbumPicker extends Component {
     };
   }
 
-  buildAlbumRow(album) {
+  getInitialState() {
+    let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    return {
+      dataSource: ds.cloneWithRows(this._genRows({})),
+    };
+  }
 
+  renderRow(rowData, sectionID, rowID, highlightRow) {
+    let rowHash = Math.abs(hashCode(rowData));
+    let imgSource = THUMB_URLS[rowHash % THUMB_URLS.length];
     return (
-      <Item
-        label={album.title}
-        value={album.id}
-        key={album.id}
+      <TouchableHighlight onPress={() => {
+        this.pressRow(rowID);
+        this.highlightRow(sectionID, rowID);
+        }}>
+        <View>
+          <View style={styles.row}>
+            <Image style={styles.thumb} source={imgSource}/>
+            <Text style={styles.text}>
+              {rowData + ' - ' + LOREM_IPSUM.substr(0, rowHash % 301 + 10)}
+            </Text>
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
+  }
+
+
+  genRows(pressData) {
+    let dataBlob = [];
+    for (let ii = 0; ii < 100; ii++) {
+      let pressedText = pressData[ii] ? ' (pressed)' : '';
+      dataBlob.push('Row ' + ii + pressedText);
+    }
+    return dataBlob;
+  }
+
+  pressRow(rowID) {
+    this._pressData[rowID] = !this._pressData[rowID];
+    this.setState({dataSource: this.state.dataSource.cloneWithRows(
+      this._genRows(this._pressData)
+    )})
+  }
+
+  renderSeparator(sectionID, rowID, adjacentRowHighlighted) {
+    return (
+      <View
+        key={`${sectionID}-${rowID}`}
+        style={{
+          height: adjacentRowHighlighted ? 4 : 1,
+          backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC',
+        }}
       />
     );
   }
 
-  buildAlbumList() {
-
-    var self = this;
-
-    let albumRows = this.props.albums.map(function(album) {
-      const albumRow = self.buildAlbumRow(album);
-      return albumRow;
-    });
-    return albumRows;
-  }
-
-  onValueChange = (value, itemPosition) => {
-    console.log("selected value: ", value);
-    console.log("itemPosition: ", itemPosition);
-    let newState = { selectedAlbum: value };
-    this.setState(newState);
-    this.props.onSelectAlbum(value);
-  };
-
-  render() {
-
-    let albumsJSX;
-    if (this.props.albums.length === 0) {
-      albumsJSX = <noscript/>;
-    }
-    else {
-      albumsJSX = this.buildAlbumList();
-    }
-
+render() {
     return (
-      <Picker
-        style={styles.picker}
-        selectedValue={this.state.selectedAlbum}
-        onValueChange={this.onValueChange.bind(this)}>
-        {albumsJSX}
-      </Picker>
+      <ListView
+        dataSource={this.state.dataSource}
+        renderRow={this._renderRow}
+        renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+        renderSeparator={this._renderSeparator}
+      />
     );
   }
 }
 
-AlbumPicker.propTypes = {
-  albums: React.PropTypes.array.isRequired,
-  onSelectAlbum: React.PropTypes.func.isRequired
-};
-
 export default AlbumPicker;
-
