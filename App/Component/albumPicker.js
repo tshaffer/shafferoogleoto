@@ -31,12 +31,18 @@ class AlbumPicker extends Component {
   constructor(props) {
     super(props);
 
-    let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    // let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    let ds = new ListView.DataSource({rowHasChanged: this.rowHasChanged});
 
     this.state = {
       selectedAlbum: '',
       dataSource: ds.cloneWithRows(this._genRows({}))
     };
+  }
+
+  rowHasChanged(r1, r2) {
+    console.log("invoke rowHasChanged");
+    return (r1 !== r2);
   }
 
   _renderRow(rowData, sectionID, rowID, highlightRow) {
@@ -62,10 +68,22 @@ class AlbumPicker extends Component {
 
 
   _genRows() {
+
+    // let dataBlob = [];
+    // for (let ii = 0; ii < 10; ii++) {
+    //   dataBlob.push('Row ' + ii.toString());
+    // }
+    // return dataBlob;
+
+    // let albumRows = this.props.albums.map(function(album) {
+    //   const albumRow = self.buildAlbumRow(album);
+    //   return albumRow;
+    // });
+
     let dataBlob = [];
-    for (let ii = 0; ii < 10; ii++) {
-      dataBlob.push('Row ' + ii.toString());
-    }
+    this.props.albums.forEach( (album) => {
+      dataBlob.push(album.title);
+    });
     return dataBlob;
   }
 
@@ -98,6 +116,7 @@ render() {
         renderRow={this._renderRow.bind(this)}
         renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
         renderSeparator={this._renderSeparator}
+        enableEmptySections={true}
       />
     );
   }

@@ -68,6 +68,7 @@ class RootContainer extends Component {
 
     this.brightPhotoIPAddress = "192.168.0.101";
 
+    this.numberOfAlbums = -1;
     this.selectedAlbum = null;
 
     // this.serverUrl = "http://localhost:8080/";
@@ -96,6 +97,8 @@ class RootContainer extends Component {
 
   parseAlbumsFeedResponse(feed) {
 
+    this.numberOfAlbums = feed.entry.length;
+
     for (let googleAlbum of feed.entry) {
       console.log("Album: ", googleAlbum.title[0]._);
 
@@ -116,8 +119,12 @@ class RootContainer extends Component {
   }
 
   handleConnectToBrightPhoto() {
+
+    this.serverUrl = "http://" + this.brightPhotoIPAddress + ":8080/";
+
     console.log("handleConnectToBrightPhoto, connect to: ");
     console.log(this.brightPhotoIPAddress);
+    console.log(this.serverUrl);
 
     // get albums from device and populate UI
     let promise = this.fetchAlbums();
@@ -164,6 +171,20 @@ class RootContainer extends Component {
 
     let self = this;
 
+    // BIG HACK - need to figure out how to update the contents of the listView
+    let albumsJSX;
+    if (this.props.albums.length === 0 || this.props.albums.length !== this.numberOfAlbums) {
+      albumsJSX = <Text>pizza</Text>;
+    }
+    else {
+      albumsJSX =
+        <AlbumPicker
+          albums={this.props.albums}
+          onSelectAlbum={this.handleSelectAlbum.bind(this)}
+        />
+        ;
+    }
+
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
@@ -199,10 +220,7 @@ class RootContainer extends Component {
         <Text style={styles.header}>
           Albums
         </Text>
-        <AlbumPicker
-          albums={this.props.albums}
-          onSelectAlbum={this.handleSelectAlbum.bind(this)}
-        />
+        {albumsJSX}
         <Button
           onPress={this.handleStartSlideShow.bind(this)}
           title="Start Slide Show"
