@@ -17,10 +17,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#F6F6F6',
     width: 256
   },
-  thumb: {
-    width: 64,
-    height: 64,
-  },
   text: {
     flex: 1,
   },
@@ -31,8 +27,7 @@ class AlbumPicker extends Component {
   constructor(props) {
     super(props);
 
-    // let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    let ds = new ListView.DataSource({rowHasChanged: this.rowHasChanged});
+    let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.state = {
       selectedAlbum: '',
@@ -40,15 +35,9 @@ class AlbumPicker extends Component {
     };
   }
 
-  rowHasChanged(r1, r2) {
-    console.log("invoke rowHasChanged");
-    return (r1 !== r2);
-  }
-
   _renderRow(rowData, sectionID, rowID, highlightRow) {
 
     let self = this;
-    // {/*self.pressRow(rowID);*/}
 
     return (
       <TouchableHighlight onPress={() => {
