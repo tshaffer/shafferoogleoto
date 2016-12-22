@@ -58,17 +58,6 @@ class AlbumPicker extends Component {
 
   _genRows() {
 
-    // let dataBlob = [];
-    // for (let ii = 0; ii < 10; ii++) {
-    //   dataBlob.push('Row ' + ii.toString());
-    // }
-    // return dataBlob;
-
-    // let albumRows = this.props.albums.map(function(album) {
-    //   const albumRow = self.buildAlbumRow(album);
-    //   return albumRow;
-    // });
-
     let dataBlob = [];
     this.props.albums.forEach( (album) => {
       dataBlob.push(album.title);
@@ -78,13 +67,11 @@ class AlbumPicker extends Component {
 
   pressRow(rowID) {
     console.log("pressRow invoked, rowID: ", rowID);
-    // this._pressData[rowID] = !this._pressData[rowID];
-    // this.setState({dataSource: this.state.dataSource.cloneWithRows(
-    //   this._genRows(this._pressData)
-    // )})
+    const album = this.props.albums[rowID];
+    console.log("selected album id: ", album.id);
+    console.log("selected album name: ", album.title);
+    this.props.onSelectAlbum(album.id);
   }
-
-  // key={`${sectionID}-${rowID}`}
 
   _renderSeparator(sectionID, rowID, adjacentRowHighlighted) {
     return (
