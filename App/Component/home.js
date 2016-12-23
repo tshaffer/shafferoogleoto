@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import {
   AppRegistry,
   Button,
-  Picker,
   StyleSheet,
   Text,
   TextInput,
@@ -20,19 +19,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    // alignItems: 'center',
+    alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
   header: {
     textAlign: 'center',
     color: '#333333',
     fontSize: 18,
-    marginBottom: 5,
+    marginTop: 32,
+    marginBottom: 24,
   },
-  leftAlign: {
-    alignItems: 'flex-start',
-    padding: 15,
-  },
+  btnSlideShow: {
+    marginBottom: 24,
+  }
 });
 
 class Home extends Component {

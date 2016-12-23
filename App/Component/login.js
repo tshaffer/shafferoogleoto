@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    // alignItems: 'center',
+    alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
   welcome: {
@@ -39,7 +39,8 @@ const styles = StyleSheet.create({
     marginLeft: 4
   },
   ipAddressTextInput: {
-    width: 164,
+    textAlign: 'center',
+    // width: 164,
     height: 20,
     borderWidth: 0.5,
     borderColor: '#0f0f0f',
@@ -57,10 +58,11 @@ class Login extends Component {
   constructor(props) {
     super(props);
 
-    this.brightPhotoIPAddress = "192.168.0.101";
+    // this.brightPhotoIPAddress = "192.168.0.101";
+    this.brightPhotoIPAddress = "localhost";
 
-    // this.serverUrl = "http://localhost:8080/";
-    this.serverUrl = "http://192.168.0.101:8080/";
+    this.serverUrl = "http://localhost:8080/";
+    // this.serverUrl = "http://192.168.0.101:8080/";
   }
 
 
@@ -120,6 +122,8 @@ class Login extends Component {
 
     let self = this;
 
+    // defaultValue="192.168.0.101"
+
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
@@ -129,7 +133,7 @@ class Login extends Component {
           Enter BrightPhoto IP address
         </Text>
         <TextInput
-          defaultValue="192.168.0.101"
+          defaultValue="localhost"
           autoFocus={true}
           style={styles.ipAddressTextInput}
           onChange={(event) => {
