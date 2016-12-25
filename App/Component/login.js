@@ -58,11 +58,17 @@ class Login extends Component {
   constructor(props) {
     super(props);
 
-    // this.brightPhotoIPAddress = "192.168.0.101";
-    this.brightPhotoIPAddress = "localhost";
+    this.defaultIPAddress = "192.168.0.117";
+    this.brightPhotoIPAddress = this.defaultIPAddress;
+    this.serverURL = "http://" + this.brightPhotoIPAddress + ":8080/";
 
-    this.serverUrl = "http://localhost:8080/";
+    // this.brightPhotoIPAddress = "192.168.0.101";
+    // this.brightPhotoIPAddress = "localhost";
+    // this.brightPhotoIPAddress = "192.168.0.116";
+
+    // this.serverUrl = "http://localhost:8080/";
     // this.serverUrl = "http://192.168.0.101:8080/";
+    // this.serverUrl = "http://192.168.0.116:8080/";
   }
 
 
@@ -123,6 +129,7 @@ class Login extends Component {
     let self = this;
 
     // defaultValue="192.168.0.101"
+    // defaultValue="localhost"
 
     return (
       <View style={styles.container}>
@@ -133,7 +140,7 @@ class Login extends Component {
           Enter BrightPhoto IP address
         </Text>
         <TextInput
-          defaultValue="localhost"
+          defaultValue={this.defaultIPAddress}
           autoFocus={true}
           style={styles.ipAddressTextInput}
           onChange={(event) => {

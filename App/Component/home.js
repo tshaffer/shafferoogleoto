@@ -42,7 +42,7 @@ class Home extends Component {
     this.selectedAlbum = null;
 
     // this.serverUrl = "http://localhost:8080/";
-    this.serverUrl = "http://192.168.0.101:8080/";
+    this.serverUrl = "http://192.168.0.117:8080/";
   }
 
   handleSelectAlbum(album) {
